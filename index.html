@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guia de Eventos Salvador</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head> 
+<body>
+  <header>
+    <h1>Guia de Eventos - Salvador</h1>
+  </header>
+  <main>
+    <p>Bem-vindo ao guia de eventos da cidade! Em breve, você encontrará as melhores opções de lazer aqui.</p>
+    <section id="mapa">
+        <h2>Localização dos Eventos</h2>
+        <div id="map"></div>
+      </section>            
+    <div id="busca">
+        <input
+          type="text"
+          id="campo-busca"
+          placeholder="Digite para buscar eventos..."
+          />
+      </div>
+      
+    <section id="eventos">
+        <h2>Próximos Eventos</h2>
+        <div class="evento">
+          <h3>Oficina de Pintura ao Ar Livre</h3>
+          <p>Data: 12 de Dezembro de 2024</p>
+          <p>Local: Parque da Cidade</p>
+          <p>Descrição: Venha relaxar pintando em contato com a natureza!</p>
+        </div>
+      
+        <div class="evento">
+          <h3>Feira de Artesanato de Salvador</h3>
+          <p>Data: 15 de Dezembro de 2024</p>
+          <p>Local: Praça da Sé</p>
+          <p>Descrição: Produtos feitos à mão por artesãos locais.</p>
+        </div>
+      
+        <div class="evento">
+          <h3>Concerto de Natal</h3>
+          <p>Data: 20 de Dezembro de 2024</p>
+          <p>Local: Teatro Castro Alves</p>
+          <p>Descrição: Uma apresentação emocionante para toda a família.</p>
+        </div>
+      </section>      
+  </main>
+  <footer>
+    <p>Desenvolvido por Cris</p>
+  </footer>
+  <script>
+    // Seleciona os elementos
+    const campoBusca = document.getElementById("campo-busca");
+  
+    // Adiciona um evento de digitação no campo de busca
+    campoBusca.addEventListener("input", function () {
+      const termoBusca = campoBusca.value.toLowerCase();
+  
+      eventos.forEach((evento) => {
+        const titulo = evento.querySelector("h3").textContent.toLowerCase();
+        const descricao = evento.querySelector("p:nth-of-type(3)").textContent.toLowerCase();
+  
+        // Verifica se o termo está no título ou na descrição
+        if (titulo.includes(termoBusca) || descricao.includes(termoBusca)) {
+          evento.style.display = "block"; // Mostra o evento
+        } else {
+          evento.style.display = "none"; // Esconde o evento
+        }
+      });
+    });
+  </script>  
+  <script>
+    // Inicializa o mapa com o ID 'map'
+    const map = L.map('map').setView([-12.9714, -38.5014], 12); // Salvador
+  
+    // Adiciona o tile layer do OpenStreetMap
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(map);
+  
+    // Adiciona marcadores com popups
+    const eventos = [
+      { position: [-12.9712, -38.5015], title: "Oficina de Pintura ao Ar Livre" },
+      { position: [-12.9720, -38.5123], title: "Feira de Artesanato de Salvador" },
+      { position: [-12.9735, -38.5087], title: "Concerto de Natal" },
+    ];
+  
+    eventos.forEach((evento) => {
+      L.marker(evento.position)
+        .addTo(map)
+        .bindPopup(`<b>${evento.title}</b>`);
+    });
+  </script>
+</body>
+</html>
